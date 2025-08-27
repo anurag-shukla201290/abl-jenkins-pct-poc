@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="abl-jenkins-pct-poc" default="dist">
+
+  <!-- —— adjust these paths —— -->
+  <property name="dlc"        value="C:/Progress/OpenEdge"/>  <!-- your OE 12.8 -->
+  <property name="src.dir"    value="src"/>
+  <property name="build.dir"  value="build"/>
+  <property name="rcode.dir"  value="${build.dir}/rcode"/>
+  <property name="dist.dir"   value="dist"/>
+  <property name="xcodepage"  value="utf-8"/>
+
+  <!-- PCT on classpath -->
+  <path id="pct.classpath">
+    <fileset dir="lib/pct">
+      <include name="PCT*.jar"/>
+      <include name="PCT.jar"/>
+    </fileset>
+  </path>
+
+  <!-- Load PCT tasks from the jar (resource name is inside the jar) -->
+  <taskdef resource="PCT.properties" classpathref="pct.classpath"/>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+    <delete dir="${dist.dir}"/>
+  </target>
+
+  <target name="init">
+    <mkdir dir="${rcode.dir}"/>
+    <mkdir dir="${dist.dir}"/>
+    <mkdir dir="${build.dir}/listing"/>
+  </target>
+
+  <!-- Compile .cls (and .p if you add any) to r-code -->
+  <target name="compile" depends="init">
+    <PCTCompile
+        dlcHome="${dlc}"
+        destDir="${rcode.dir}"
+		cpInternal="utf-8"
+        cpStream="utf-8"
+        failOnError="true">
+
+
+      <!-- PROPATH -->
+      <propath>
+        <pathelement location="${src.dir}"/>
+      </propath>
+
+      <!-- What to compile -->
+      <fileset dir="${src.dir}">
+        <include name="**/*.cls"/>
+        <include name="**/*.p"/>
+      </fileset>
+
+    </PCTCompile>
+  </target>
+
+
+
+  <target name="dist" depends="compile">
+    <zip destfile="${dist.dir}/rcode.zip" basedir="${rcode.dir}"/>
+  </target>
+
+</project>

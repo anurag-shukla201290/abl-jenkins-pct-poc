@@ -1,0 +1,16 @@
+﻿# Ignore build artifacts
+/build/
+/dist/
+/tmp/
+
+# IDE files
+.classpath
+.project
+.settings/
+
+# Logs
+*.log
+
+# OS files
+Thumbs.db
+.DS_Store
