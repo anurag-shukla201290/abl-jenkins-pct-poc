@@ -1,0 +1,1 @@
+MESSAGE "Hello world second program" VIEW-AS ALERT-BOX.
